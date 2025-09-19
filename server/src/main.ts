@@ -15,10 +15,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .addBearerAuth()
-    .addServer('http://localhost:3004')
-    .addServer('https://bemcu.konselingkesehatanjiwa.my.id')
-    .setTitle('MY API')
-    .setDescription('MYAPI only for testing')
+    .addServer('http://localhost:4444')
+    .setTitle('Documentation API')
+    .setDescription('API Ecommerce Fullstack - Tes')
     .setVersion('1.0')
     .build()
 

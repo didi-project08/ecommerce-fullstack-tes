@@ -80,6 +80,8 @@ npm run db:seed
     npm run dev
     Server: http://localhost:4444
     Client: http://localhost:3000
+    
+    Docs API: http://localhost:4444/docs
 
 🗃️ Database
 
