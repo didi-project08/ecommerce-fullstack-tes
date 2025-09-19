@@ -31,16 +31,14 @@ A complete e-commerce solution built with Next.js (frontend) and NestJS (backend
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/didi-project08/ecommerce-fullstack-tes.git
    cd ecommerce-fullstack
 
 Install dependencies
-bash
 
-npm run install:all
+    npm run install:all
 
 Setup environment variables
-bash
 
 # Server
 cp server/.env.example server/.env
@@ -49,7 +47,6 @@ cp server/.env.example server/.env
 cp client/.env.local.example client/.env.local
 
 Setup database
-bash
 
 # Generate Prisma client
 npm run db:generate
@@ -63,18 +60,14 @@ npm run db:seed
 🚀 Development
 
     Start development servers
-    bash
 
-npm run dev
-
+    npm run dev
     Server: http://localhost:4444
-
     Client: http://localhost:3000
 
 Run with Docker
-bash
 
-docker-compose up -d
+    docker-compose up -d
 
 📋 Available Scripts
 
@@ -120,26 +113,22 @@ JWT-based authentication with the following features:
 Vercel (Frontend) + Railway (Backend)
 
     Frontend on Vercel
-    bash
-
-# Connect your GitHub repo to Vercel
-# Set environment variables in Vercel dashboard
+    # Connect your GitHub repo to Vercel
+    # Set environment variables in Vercel dashboard
 
 Backend on Railway
-bash
 
-# Connect your GitHub repo to Railway
-# Set environment variables in Railway dashboard
-# Add MySQL plugin
+    # Connect your GitHub repo to Railway
+    # Set environment variables in Railway dashboard
+    # Add MySQL plugin
 
 Docker Deployment
-bash
 
-# Build and run with Docker
-docker-compose up --build
+    # Build and run with Docker
+    docker-compose up --build
 
-# Production build
-docker-compose -f docker-compose.prod.yml up --build
+    # Production build
+    docker-compose -f docker-compose.prod.yml up --build
 
 🤝 Contributing
 
