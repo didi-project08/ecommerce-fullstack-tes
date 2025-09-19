@@ -88,16 +88,7 @@ JWT-based authentication with the following features:
 
     Password hashing with argon2
 
-📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-🆘 Support
-
-If you have any questions or issues, please open an issue on GitHub or contact the development team.
-text
-
-
-## 10. Development Workflow
+## Development Workflow
 
 ### Untuk development:
 ```bash
@@ -120,3 +111,12 @@ npm run build
 
 # Jalankan dengan Docker
 docker-compose up --build
+```
+
+📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+🆘 Support
+
+If you have any questions or issues, please open an issue on GitHub or contact the development team.
+text
