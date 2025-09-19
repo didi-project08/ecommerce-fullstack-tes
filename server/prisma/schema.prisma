@@ -48,12 +48,15 @@ model User_logs {
   deletedAt DateTime?
   deletedBy String?
 
+  @@index([userId])
+  @@index([createdAt])
+  @@index([ip])
   @@map("user_logs")
 }
 
 model Roles {
   id               String            @id @default(uuid())
-  name             String
+  name             String            @unique
   createdAt        DateTime          @default(now())
   createdBy        String?
   updatedAt        DateTime          @updatedAt
@@ -77,10 +80,11 @@ model Role_users {
   deletedAt DateTime?
   deletedBy String?
   roles     Roles     @relation(fields: [roleId], references: [id])
-  users      Users      @relation(fields: [userId], references: [id])
+  users     Users     @relation(fields: [userId], references: [id])
 
-  @@index([roleId], map: "role_users_roleId_fkey")
-  @@index([userId], map: "role_users_userId_fkey")
+  @@index([roleId])
+  @@index([userId])
+  @@unique([userId, roleId])
   @@map("role_users")
 }
 
@@ -97,8 +101,9 @@ model Role_permissions {
   roles         Roles       @relation(fields: [roleId], references: [id])
   permissions   Permissions @relation(fields: [permissionsId], references: [id])
 
-  @@index([roleId], map: "role_permissions_roleId_fkey")
-  @@index([permissionsId], map: "role_permissions_permissionsId_fkey")
+  @@index([roleId])
+  @@index([permissionsId])
+  @@unique([roleId, permissionsId])
   @@map("role_permissions")
 }
 
@@ -117,16 +122,17 @@ model Permissions {
   updatedBy         String?
   deletedAt         DateTime?
   deletedBy         String?
-  permission_groups  Permission_groups?    @relation(fields: [pGroupId], references: [id])
+  permission_groups Permission_groups? @relation(fields: [pGroupId], references: [id])
   role_permissions  Role_permissions[]
 
-  @@index([pGroupId], map: "permissions_pGroupId_fkey")
+  @@index([pGroupId])
+  @@index([type])
   @@map("permissions")
 }
 
 model Permission_groups {
   id          String        @id @default(uuid())
-  name        String
+  name        String        @unique
   icon        String?
   sort        Int?
   createdAt   DateTime      @default(now())
@@ -159,6 +165,12 @@ model Products {
   cartItems   CartItems[]
   orderItems  OrderItems[]
 
+  @@index([name])
+  @@index([category])
+  @@index([price])
+  @@index([stock])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("products")
 }
 
@@ -166,7 +178,7 @@ model Carts {
   id          String     @id @default(uuid())
   userId      String
   sessionId   String?    // Untuk guest users
-  user        Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
   cartItems   CartItems[]
   createdAt   DateTime    @default(now())
   createdBy   String?
@@ -176,6 +188,10 @@ model Carts {
   deletedBy   String?
 
   @@unique([userId, sessionId])
+  @@index([userId])
+  @@index([sessionId])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("carts")
 }
 
@@ -184,8 +200,8 @@ model CartItems {
   cartId    String
   productId String
   quantity  Int      @default(1)
-  cart      Carts     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product   Products  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cart      Carts    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt   DateTime    @default(now())
   createdBy   String?
   updatedAt   DateTime    @updatedAt
@@ -194,6 +210,10 @@ model CartItems {
   deletedBy   String?
 
   @@unique([cartId, productId])
+  @@index([cartId])
+  @@index([productId])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("cart_items")
 }
 
@@ -216,7 +236,12 @@ model Orders {
   orderItems   OrderItems[]
   payments     Payments[]
 
-  @@index([userId], map: "orders_userId_fkey")
+  @@index([userId])
+  @@index([orderDate])
+  @@index([status])
+  @@index([totalAmount])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("orders")
 }
 
@@ -235,8 +260,10 @@ model OrderItems {
   orders     Orders   @relation(fields: [orderId], references: [id])
   products   Products @relation(fields: [productId], references: [id])
 
-  @@index([orderId], map: "order_items_orderId_fkey")
-  @@index([productId], map: "order_items_productId_fkey")
+  @@index([orderId])
+  @@index([productId])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("order_items")
 }
 
@@ -255,7 +282,12 @@ model Payments {
   deletedBy   String?
   orders      Orders        @relation(fields: [orderId], references: [id])
 
-  @@index([orderId], map: "payments_orderId_fkey")
+  @@index([orderId])
+  @@index([method])
+  @@index([status])
+  @@index([paymentDate])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("payments")
 }
 
@@ -276,7 +308,13 @@ model Address {
   deletedBy   String?
   users       Users    @relation(fields: [userId], references: [id])
 
-  @@index([userId], map: "address_userId_fkey")
+  @@index([userId])
+  @@index([isDefault])
+  @@index([city])
+  @@index([state])
+  @@index([country])
+  @@index([createdAt])
+  @@index([deletedAt])
   @@map("address")
 }
 
