@@ -13,15 +13,18 @@ A complete e-commerce solution built with Next.js (frontend) and NestJS (backend
 ## 📦 Project Structure
 
     ecommerce-fullstack/
-        ├── backend/ # NestJS API
-        │ ├── src/
-        │ ├── prisma/
-        │ └── package.json
-        ├── frontend/ # Next.js application
-        │ ├── src/
-        │ ├── public/
-        │ └── package.json
-        ├── docker-compose.yml # Docker setup
+        ├── client/                 # Next.js Frontend
+        │   ├── src/
+        │   ├── public/
+        │   ├── package.json
+        │   └── ...
+        ├── server/                 # NestJS Backend
+        │   ├── src/
+        │   ├── prisma/
+        │   ├── package.json
+        │   └── ...
+        ├── package.json            # Root package.json untuk scripts
+        ├── docker-compose.yml      # Docker setup
         └── README.md
 
 ## 🛠️ Installation
