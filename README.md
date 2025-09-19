@@ -8,7 +8,6 @@ A complete e-commerce solution built with Next.js (frontend) and NestJS (backend
 - **Backend**: NestJS, TypeScript, Prisma ORM
 - **Database**: MySQL
 - **Authentication**: JWT
-- **Containerization**: Docker
 
 ## 📦 Project Structure
 
@@ -65,26 +64,6 @@ npm run db:seed
     Server: http://localhost:4444
     Client: http://localhost:3000
 
-Run with Docker
-
-    docker-compose up -d
-
-📋 Available Scripts
-
-    npm run dev - Start both frontend and backend in development mode
-
-    npm run build - Build both applications for production
-
-    npm run start - Start both applications in production mode
-
-    npm run lint - Run linting for both applications
-
-    npm run db:generate - Generate Prisma client
-
-    npm run db:push - Push database schema
-
-    npm run db:seed - Seed database with sample data
-
 🗃️ Database
 
 The application uses MySQL with Prisma ORM. Key models include:
@@ -108,39 +87,6 @@ JWT-based authentication with the following features:
     Role-based access control
 
     Password hashing with argon2
-
-📦 Deployment
-Vercel (Frontend) + Railway (Backend)
-
-    Frontend on Vercel
-    # Connect your GitHub repo to Vercel
-    # Set environment variables in Vercel dashboard
-
-Backend on Railway
-
-    # Connect your GitHub repo to Railway
-    # Set environment variables in Railway dashboard
-    # Add MySQL plugin
-
-Docker Deployment
-
-    # Build and run with Docker
-    docker-compose up --build
-
-    # Production build
-    docker-compose -f docker-compose.prod.yml up --build
-
-🤝 Contributing
-
-    Fork the project
-
-    Create your feature branch (git checkout -b feature/AmazingFeature)
-
-    Commit your changes (git commit -m 'Add some AmazingFeature')
-
-    Push to the branch (git push origin feature/AmazingFeature)
-
-    Open a Pull Request
 
 📄 License
 
