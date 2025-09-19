@@ -26,6 +26,23 @@ A complete e-commerce solution built with Next.js (frontend) and NestJS (backend
         ├── docker-compose.yml      # Docker setup
         └── README.md
 
+## Disclaimer Dulu Hehe
+
+Aplikasi ini dibuat khusus untuk keperluan tes teknis sebagai bagian dari proses seleksi kandidat Fullstack Developer.
+Catatan Penting
+
+    Tujuan Pengembangan: Aplikasi ini murni dibuat sebagai demonstrasi kemampuan teknis (technical skills assessment) dan tidak ditujukan untuk penggunaan produksi (production-ready) atau tujuan komersial.
+
+    Keterbatasan Fitur: Fitur-fitur yang diimplementasikan mungkin tidak lengkap dan difokuskan untuk memenuhi requirement yang ditentukan dalam tahap tes. Beberapa aspek seperti error handling yang komprehensif, security hardening, testing suite yang lengkap, atau optimasi performa mungkin belum sepenuhnya diimplementasikan.
+
+    Data dan Konten: Semua data yang digunakan mungkin merupakan data contoh (dummy data) dan bukan data real.
+
+    Kode Contoh: Kode dalam proyek ini merupakan hasil pengerjaan kandidat dan boleh digunakan sebagai referensi atau bahan evaluasi semata.
+
+Terima kasih atas perhatiannya.
+
+Disclaimer ini dibuat untuk keperluan transparansi proses rekrutmen.
+
 ## 🛠️ Installation
 
 1. **Clone the repository**
