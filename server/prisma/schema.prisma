@@ -1,0 +1,305 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        String      @id @default(uuid())
+  fullname  String
+  username  String      @unique
+  password  String
+  email     String      @unique
+  hashedRt  String?
+  timeRt    Int         @default(7200000)
+  timeAt    Int         @default(30000)
+  limitHit  Int?
+  defaultHit Int?
+  ttl       Int?
+  lastHitAt DateTime?
+  createdAt DateTime    @default(now())
+  createdBy String?
+  updatedAt DateTime    @updatedAt
+  updatedBy String?
+  deletedAt DateTime?
+  deletedBy String?
+  role_users Role_users[]
+  carts     Carts[]
+  orders    Orders[]
+  addresses Address[]
+
+  @@map("users")
+}
+
+model User_logs {
+  id        String    @id @default(uuid())
+  userId    String?
+  ip        String
+  method    String
+  accessUrl String    @db.LongText
+  userAgent String?   @db.LongText
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+  deletedAt DateTime?
+  deletedBy String?
+
+  @@map("user_logs")
+}
+
+model Roles {
+  id               String            @id @default(uuid())
+  name             String
+  createdAt        DateTime          @default(now())
+  createdBy        String?
+  updatedAt        DateTime          @updatedAt
+  updatedBy        String?
+  deletedAt        DateTime?
+  deletedBy        String?
+  role_permissions Role_permissions[]
+  role_users       Role_users[]
+
+  @@map("roles")
+}
+
+model Role_users {
+  id        String    @id @default(uuid())
+  userId    String
+  roleId    String
+  createdAt DateTime  @default(now())
+  createdBy String?
+  updatedAt DateTime  @updatedAt
+  updatedBy String?
+  deletedAt DateTime?
+  deletedBy String?
+  roles     Roles     @relation(fields: [roleId], references: [id])
+  users      Users      @relation(fields: [userId], references: [id])
+
+  @@index([roleId], map: "role_users_roleId_fkey")
+  @@index([userId], map: "role_users_userId_fkey")
+  @@map("role_users")
+}
+
+model Role_permissions {
+  id            String      @id @default(uuid())
+  roleId        String      
+  permissionsId String
+  createdAt     DateTime    @default(now())
+  createdBy     String?
+  updatedAt     DateTime    @updatedAt
+  updatedBy     String?
+  deletedAt     DateTime?
+  deletedBy     String?
+  roles         Roles       @relation(fields: [roleId], references: [id])
+  permissions   Permissions @relation(fields: [permissionsId], references: [id])
+
+  @@index([roleId], map: "role_permissions_roleId_fkey")
+  @@index([permissionsId], map: "role_permissions_permissionsId_fkey")
+  @@map("role_permissions")
+}
+
+model Permissions {
+  id                String             @id @default(uuid())
+  name              String             @unique
+  pGroupId          String?
+  description       String?
+  type              String?
+  icon              String?
+  path              String?
+  sort              Int?
+  createdAt         DateTime           @default(now())
+  createdBy         String?
+  updatedAt         DateTime           @updatedAt
+  updatedBy         String?
+  deletedAt         DateTime?
+  deletedBy         String?
+  permission_groups  Permission_groups?    @relation(fields: [pGroupId], references: [id])
+  role_permissions  Role_permissions[]
+
+  @@index([pGroupId], map: "permissions_pGroupId_fkey")
+  @@map("permissions")
+}
+
+model Permission_groups {
+  id          String        @id @default(uuid())
+  name        String
+  icon        String?
+  sort        Int?
+  createdAt   DateTime      @default(now())
+  createdBy   String?
+  updatedAt   DateTime      @updatedAt
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+  permissions Permissions[]
+
+  @@map("permission_groups")
+}
+
+// ==================== E-COMMERCE MODELS ====================
+
+model Products {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal     @db.Decimal(10, 2)
+  category    String
+  stock       Int         @default(0)
+  imageUrl    String?
+  createdAt   DateTime    @default(now())
+  createdBy   String?
+  updatedAt   DateTime    @updatedAt
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+  cartItems   CartItems[]
+  orderItems  OrderItems[]
+
+  @@map("products")
+}
+
+model Carts {
+  id          String     @id @default(uuid())
+  userId      String
+  sessionId   String?    // Untuk guest users
+  user        Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems   CartItems[]
+  createdAt   DateTime    @default(now())
+  createdBy   String?
+  updatedAt   DateTime    @updatedAt
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  @@unique([userId, sessionId])
+  @@map("carts")
+}
+
+model CartItems {
+  id        String   @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int      @default(1)
+  cart      Carts     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Products  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  createdBy   String?
+  updatedAt   DateTime    @updatedAt
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model Orders {
+  id           String       @id @default(uuid())
+  userId       String?
+  orderDate    DateTime     @default(now())
+  totalAmount  Decimal      @db.Decimal(10, 2)
+  status       OrderStatus  @default(PENDING)
+  email        String?
+  phone        String?
+  address      String?
+  createdAt    DateTime     @default(now())
+  createdBy    String?
+  updatedAt    DateTime     @updatedAt
+  updatedBy    String?
+  deletedAt    DateTime?
+  deletedBy    String?
+  users        Users?       @relation(fields: [userId], references: [id])
+  orderItems   OrderItems[]
+  payments     Payments[]
+
+  @@index([userId], map: "orders_userId_fkey")
+  @@map("orders")
+}
+
+model OrderItems {
+  id         String   @id @default(uuid())
+  orderId    String
+  productId  String
+  quantity   Int
+  price      Decimal  @db.Decimal(10, 2)
+  createdAt  DateTime @default(now())
+  createdBy  String?
+  updatedAt  DateTime @updatedAt
+  updatedBy  String?
+  deletedAt  DateTime?
+  deletedBy  String?
+  orders     Orders   @relation(fields: [orderId], references: [id])
+  products   Products @relation(fields: [productId], references: [id])
+
+  @@index([orderId], map: "order_items_orderId_fkey")
+  @@index([productId], map: "order_items_productId_fkey")
+  @@map("order_items")
+}
+
+model Payments {
+  id          String        @id @default(uuid())
+  orderId     String
+  amount      Decimal       @db.Decimal(10, 2)
+  method      PaymentMethod
+  status      PaymentStatus @default(PENDING)
+  paymentDate DateTime?
+  createdAt   DateTime      @default(now())
+  createdBy   String?
+  updatedAt   DateTime      @updatedAt
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+  orders      Orders        @relation(fields: [orderId], references: [id])
+
+  @@index([orderId], map: "payments_orderId_fkey")
+  @@map("payments")
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  userId      String
+  street      String
+  city        String
+  state       String
+  zipCode     String
+  country     String   @default("Indonesia")
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  createdBy   String?
+  updatedAt   DateTime @updatedAt
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+  users       Users    @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "address_userId_fkey")
+  @@map("address")
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CREDIT_CARD
+  DEBIT_CARD
+  E_WALLET
+  COD
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}

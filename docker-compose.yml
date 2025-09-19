@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce_mysql
+    environment:
+      MYSQL_DATABASE: ecommerce_db
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ecommerce_network
+    command: --default-authentication-plugin=mysql_native_password
+
+  backend:
+    build: ./backend
+    container_name: ecommerce_backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=mysql://mysqluser:mysqlpassword@mysql:3306/ecommerce_db
+      - JWT_SECRET=your-super-secret-jwt-key
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=mysqluser
+      - DB_PASSWORD=mysqlpassword
+      - DB_DATABASE=ecommerce_db
+    depends_on:
+      - mysql
+    networks:
+      - ecommerce_network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: ecommerce_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+    depends_on:
+      - backend
+    networks:
+      - ecommerce_network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  ecommerce_network:
+    driver: bridge
