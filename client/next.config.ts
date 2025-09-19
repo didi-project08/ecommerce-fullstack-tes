@@ -3,7 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig = {
   // Konfigurasi lainnya
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify: true,
+
+  turbopack: {
+    root: __dirname // Tentukan root directory
+  },
 
   webpack: (config:any) => {
     config.resolve.alias = {

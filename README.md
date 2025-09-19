@@ -117,6 +117,9 @@ npm run db:generate
 npm run db:push  
 npm run db:seed
 
+# Untuk melihat prisma studio
+npm run db:studio
+
 # Jalankan development servers
 npm run dev
 

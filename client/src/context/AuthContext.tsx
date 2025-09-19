@@ -75,6 +75,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const { showNotification } = useNotification();
 
+  // Custom event untuk memberi tahu komponen lain bahwa status auth berubah
+  useEffect(() => {
+    const handleAuthChange = () => {
+      // Event handler kosong, kita hanya perlu memicu render ulang
+    };
+    
+    window.addEventListener('auth:change', handleAuthChange);
+    
+    return () => {
+      window.removeEventListener('auth:change', handleAuthChange);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -82,6 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         const response = await api.post('/auth/me');
         
+        // Data user berada di response.data.data
         const userData = response.data.data;
         
         setAuthState({
@@ -90,6 +104,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           isAuthenticated: true,
           error: null
         });
+        
+        // Pancarkan event kustom setelah status auth berubah
+        window.dispatchEvent(new Event('auth:change'));
       } catch (error: any) {
         const errorMessage = error.response?.data?.message || 'Authentication failed';
         setAuthState({
@@ -98,6 +115,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           isAuthenticated: false,
           error: error.response?.data?.message || 'Authentication failed'
         });
+        
+        // Pancarkan event kustom setelah status auth berubah
+        window.dispatchEvent(new Event('auth:change'));
+        
         showNotification(errorMessage, 'error');
       }
     };
@@ -116,6 +137,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         error: null
       });
       
+      // Pancarkan event kustom setelah status auth berubah
+      window.dispatchEvent(new Event('auth:change'));
+      
       return true;
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Logout failed';
@@ -124,6 +148,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         error: error.response?.data?.message || 'Logout failed'
       }));
 
+      // Pancarkan event kustom setelah status auth berubah
+      window.dispatchEvent(new Event('auth:change'));
+      
       showNotification(errorMessage, 'error');
       return false;
     }
@@ -145,7 +172,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         error: null
       });
       
-      showNotification('Data pengguna berhasil diperbarui', 'success');
+      // Pancarkan event kustom setelah status auth berubah
+      window.dispatchEvent(new Event('auth:change'));
+      
+      showNotification('Anda berhasil login', 'success');
       return true;
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Authentication failed';
@@ -155,6 +185,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: false,
         error: error.response?.data?.message || 'Authentication failed'
       });
+      
+      // Pancarkan event kustom setelah status auth berubah
+      window.dispatchEvent(new Event('auth:change'));
       
       showNotification(errorMessage, 'error');
       return false;

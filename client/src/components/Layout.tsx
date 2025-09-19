@@ -31,6 +31,8 @@ export default function Layout({ children }: LayoutProps) {
     }
   };
 
+  console.log(user)
+
   // Jika belum di sisi klien atau masih loading, tampilkan loading
   if (!isClient || loading) {
     return (

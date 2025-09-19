@@ -68,6 +68,9 @@ export default function Login() {
 
         try {
             await api.post<LoginResponse>('/auth/signin', data);
+            
+            await auth.refetch();
+
             router.push('/products');
         } catch (err: any) {
             const errorMessage = err.response?.data?.message || 'Login gagal';
