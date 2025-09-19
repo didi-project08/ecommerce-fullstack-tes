@@ -83,6 +83,10 @@ npm run db:seed
     
     Docs API: http://localhost:4444/docs
 
+    Akses Client login default
+        email: admin@example.com
+        password: 12345
+
 🗃️ Database
 
 The application uses MySQL with Prisma ORM. Key models include:
